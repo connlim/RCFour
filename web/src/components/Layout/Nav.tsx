@@ -8,11 +8,12 @@ import { selectUser, setUser } from '../../features/user/userSlice';
 const Nav = () => {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(selectUser);
-	const [uid, setUid] = useState('');
+
 	onAuthStateChanged(auth, (user) => {
 		dispatch(setUser(user));
 		// https://firebase.google.com/docs/reference/js/firebase.User
 	});
+
 	return (
 		<div>
 			Nav Bar
