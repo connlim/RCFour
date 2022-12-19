@@ -6,13 +6,14 @@ import {
 import EventService, { EventCreationData } from "../../services/EventService"
 import { auth } from "../../firebase/init";
 import { GeoPoint } from "firebase/firestore";
+import FormMap from "../Map/FormMap";
+import { useAppSelector } from "../../features/app/hooks";
 
 
 const EventCreation = () => {
-
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [geopoint, setGeopoint] = useState()
+  const { markLocation } = useAppSelector((state) => state.events);
 
   const handleTitleChange = (event: any) => {
     const target = event.target
@@ -24,29 +25,18 @@ const EventCreation = () => {
     setDescription(target.value)
   }
 
-  const handleLocationChange = (event: any) => {
-    const target = event.target
-    setLocation(target.value);
-  }
-
   const handleEventSubmit = () => {
     const eventService = new EventService()
-
     const uid = auth.currentUser?.uid;
-
+    
     if(uid === undefined) {
       return;
     }
-
-    // if(geopoint === undefined) {
-    //   console.log("input lat long")
-    //   return
-    // }
-
-
-
+    if(markLocation === undefined) {
+      console.log("input lat long")
+      return
+    }
     const sendEvent = async () => {
-
       // prepare data
       const data: EventCreationData = {
         user_id: uid,
@@ -54,11 +44,10 @@ const EventCreation = () => {
         description: description,
         timestamp: Date.now().toString(),
         location: {
-          lat: 12,
-          lng: 12,
+          lat: markLocation.latitude,
+          lng: markLocation.longitude,
         },
       }
-
       try {
         await eventService.createEvent(data);
         console.log("event created")
@@ -71,7 +60,6 @@ const EventCreation = () => {
   }
 
   return (
-
     <Box
       sx={{
         display: "flex",
@@ -88,45 +76,56 @@ const EventCreation = () => {
     >
 
       <Box>
+        <Typography
+          sx={{
+            alignSelf: "flex-start",
+            fontFamily:"Roboto",
+            fontSize: "18px",
+          }}
+        >
+          Title
+        </Typography>
 
-      <Typography
-        sx={{
-          alignSelf: "flex-start",
-          fontFamily:"Roboto",
-          fontSize: "18px",
-        }}
-      >
-        Title
-      </Typography>
+        <TextField
+          onChange={handleTitleChange}
+          sx={{
+            width: "100%"
+          }}
+          />
+      </Box>
 
-      <TextField
-        onChange={handleTitleChange}
-        sx={{
-          width: "100%"
-        }}
+      <Box>
+        <Typography 
+          sx={{
+            alignSelf: "flex-start",
+            fontFamily:"Roboto",
+            fontSize: "18px",
+          }}
+        >
+          Description
+        </Typography>
+        <TextField 
+          onChange={handleDescriptionChange}
+            multiline
+            minRows={4}
+          sx={{
+            width: "100%",
+          }}
         />
       </Box>
 
-        <Box>
-
-      <Typography 
-        sx={{
-          alignSelf: "flex-start",
-          fontFamily:"Roboto",
-          fontSize: "18px",
-        }}
-      >
-        Description
-      </Typography>
-
-      <TextField 
-        onChange={handleDescriptionChange}
-          multiline
-          minRows={4}
-        sx={{
-          width: "100%",
-        }}
-        />
+      <Box>
+        <Typography
+          sx={{
+            alignSelf: "flex-start",
+            fontFamily:"Roboto",
+            fontSize: "18px",
+          }}
+        >
+          Location
+        </Typography>
+        <FormMap />
+      </Box>
 
       <Button
         onClick={handleEventSubmit}
@@ -149,7 +148,6 @@ const EventCreation = () => {
       >
         Create Event
       </Button>
-
     </Box>
   )
 }
