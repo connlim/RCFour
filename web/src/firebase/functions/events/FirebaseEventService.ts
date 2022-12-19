@@ -5,10 +5,32 @@ import { EventCreationData, EventData, Geopoint } from "../../../services/EventS
 
 export async function getAllEvents() {
   const querySnapshot = await getDocs(collection(db, "events"));
+
+  const result : EventData[] = [];
   querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`);
+    const id: string = doc.id;
+    const data = doc.data();
+    console.log(`${doc.id} => ${doc.data().location.latitude}`);
+
+    const loc: Geopoint = {
+      lat: data.location.latitude, // Can be undefined
+      lng: data.location.longitude // Can be undefined
+    }
+    
+    const event: EventData = {
+      event_id: id,
+      user_id: data.organiser,
+      title: data.title,
+      description: data.description,
+      timestamp: data.timestamp,
+      location: loc,
+      attendees_ids: data.attendees,
+      attendees_names: data.attendees_names,
+    };
+    result.push(event);
   });
-} 
+  return result;
+}
 
 export async function getEventById(id: string) {
   const eventRef = doc(db, "events", id);
@@ -18,18 +40,25 @@ export async function getEventById(id: string) {
     console.log("No such document!", id);
   } else {
     const data = eventSnap.data();
-    // console.log("Document data:", data);
-    // const result: EventData = {
-    //   event_id: id,
-    //   user_id: data.organiser,
-    //   title: data.title,
-    //   description: data.description,
-    //   timestamp: data.timestamp,
-    //   location: GeoPoint(data.location.lat, data.location.lng);
-    //   attendees_ids: data.attendees,
-    //   attendees_names: data.attendees_names,
-    // };
-    // return result;
+    console.log("Document data:", data);
+
+    const loc: Geopoint = {
+      lat: data.location.latitude, // Can be undefined
+      lng: data.location.longitude // Can be undefined
+    }
+
+    const result: EventData = {
+      event_id: id,
+      user_id: data.organiser,
+      title: data.title,
+      description: data.description,
+      timestamp: data.timestamp,
+      location: loc,
+      attendees_ids: data.attendees,
+      attendees_names: data.attendees_names,
+    };
+    
+    return result;
   }
 }
 
@@ -49,4 +78,8 @@ export async function addEvent(data: EventCreationData) {
   } catch (e) {
     console.error("Error adding document: ", e);
   }
+}
+
+export function deleteEvent() {
+
 }
