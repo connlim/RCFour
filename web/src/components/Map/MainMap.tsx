@@ -5,6 +5,7 @@ import { useAppSelector } from '../../features/app/hooks';
 import { MapLocation } from '../../features/events/eventsSlice';
 import ClickMarker from './ClickMarker';
 import CurrentMarker from './CurrentMarker';
+import EventMarker from './EventMarker';
 import { GeoMap } from './Map';
 
 export default function MainMap() {
@@ -20,26 +21,13 @@ export default function MainMap() {
 		}
 	}, [initFly, currLocation]);
 
-	const eventMarkers = events.map((e) => {
-		const { lat: latitude, lng: longitude } = e.location;
-		return (latitude ?? false) && (longitude ?? false) ? (
-			<Marker
-				key={e.event_id}
-				anchor="bottom"
-				color="orange"
-				latitude={latitude}
-				longitude={longitude}
-			/>
-		) : null;
-	});
-
 	const markers = useMemo(
 		() => [
-			...eventMarkers,
+			...events.map((e) => <EventMarker key={e.event_id} event={e} />),
 			<ClickMarker key="clickclickclick" />,
 			<CurrentMarker key="im_here" />,
 		],
-		[eventMarkers],
+		[events],
 	);
 
 	return (
