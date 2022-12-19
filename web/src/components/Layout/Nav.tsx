@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signIn, mySignOut } from "../../firebase/auth";
 import { addEvent } from "../../firebase/functions/events/FirebaseEventService";
 import { auth } from "../../firebase/init";
@@ -186,6 +186,9 @@ function Nav() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem onClick={() => navigate("/profile")}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
               {settings.map((setting, i) => (
                 <MenuItem
                   key={i}
