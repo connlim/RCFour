@@ -15,6 +15,7 @@ import {
 } from '../../features/events/eventsSlice';
 import { Fab } from '@mui/material';
 import { NearMe } from '@mui/icons-material';
+import { pushSnack } from '../../features/snacks/snacksSlice';
 
 const token =
 	'pk.eyJ1IjoiYnJvc2VwaDAiLCJhIjoiY2twbDFiYWptMWdocDJucDliNHJsNThobiJ9.3w6p_pdYAMBaKnFMhb1SSQ';
@@ -32,12 +33,12 @@ type Coor = {
 	longitude: number;
 };
 
-interface Props extends MapProps {
+interface Props extends React.PropsWithChildren {
 	markers?: (JSX.Element | Element | null)[];
 	flyTo?: Coor;
 }
 
-export function GeoMap({ markers, flyTo }: Props) {
+export function GeoMap({ markers, flyTo, children }: Props) {
 	const dispatch = useAppDispatch();
 	const { dragLocation, currLocation } = useAppSelector(
 		(state) => state.events,
@@ -45,12 +46,19 @@ export function GeoMap({ markers, flyTo }: Props) {
 	const ref = React.useRef<MapRef | null>(null);
 
 	React.useEffect(() => {
-		if (flyTo) {
+		if (flyTo?.latitude != null && flyTo?.longitude != null) {
 			ref.current?.flyTo({
 				center: [flyTo.longitude, flyTo.latitude],
 				duration: FLY_DURATION,
 				zoom: DEFAULT_ZOOM,
 			});
+		} else {
+			dispatch(
+				pushSnack({
+					severity: 'error',
+					message: 'Invalid coordinates!',
+				}),
+			);
 		}
 	}, [flyTo]);
 
@@ -83,6 +91,7 @@ export function GeoMap({ markers, flyTo }: Props) {
 			mapStyle="mapbox://styles/mapbox/streets-v9"
 			mapboxAccessToken={token}>
 			{markers}
+			{children}
 			<Fab
 				disabled={!currLocation}
 				onClick={handleFlyToCurrent}
