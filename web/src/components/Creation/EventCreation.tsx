@@ -78,12 +78,17 @@ const EventCreation = () => {
         justifyContent: "space-between",
         padding: "1rem",
         border: 2,
+        gap: "1rem",
       }}
     >
 
+      <Box>
+
       <Typography
         sx={{
-          alignSelf: "flex-start"
+          alignSelf: "flex-start",
+          fontFamily:"Roboto",
+          fontSize: "18px",
         }}
       >
         Title
@@ -95,25 +100,47 @@ const EventCreation = () => {
           width: "100%"
         }}
         />
+      </Box>
 
-      <Typography marginTop={"1rem"}>
+        <Box>
+
+      <Typography 
+        sx={{
+          alignSelf: "flex-start",
+          fontFamily:"Roboto",
+          fontSize: "18px",
+        }}
+      >
         Description
       </Typography>
 
       <TextField 
         onChange={handleDescriptionChange}
+          multiline
+          minRows={4}
+        sx={{
+          width: "100%",
+        }}
         />
+      </Box>
 
       <Button
         onClick={handleEventSubmit}
-        // variant="outlined"
         sx={{
           border: 1,
           width: 200,
           alignSelf: "center",
-          borderRadius: 100,
+          // borderRadius: 100,
           borderColor: "black",
           marginTop: "1rem", 
+          color: "black",
+          borderRadius: "0",
+          marginLeft: "1rem",
+          textTransform: "none",
+          fontSize: "1rem",
+          fontWeight: "600",
+          letterSpacing: "1px"
+
         }}
       >
         Create Event
