@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { 
-  Box,
+  Box, Button, Input, TextField, Typography,
 } from "@mui/material";
 
 import EventService, { EventCreationData } from "../../services/EventService"
@@ -13,7 +13,17 @@ const EventCreation = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
-  const HandleEventSubmit = () => {
+  const handleTitleChange = (event: any) => {
+    const target = event.target
+    setTitle(target.value)
+  }
+
+  const handleDescriptionChange = (event: any) => {
+    const target = event.target
+    setDescription(target.value)
+  }
+
+  const handleEventSubmit = () => {
     const eventService = new EventService()
 
     const uid = auth.currentUser?.uid;
@@ -22,7 +32,7 @@ const EventCreation = () => {
     }
 
     const sendEvent = async () => {
-      
+
       // prepare data
       const data: EventCreationData = {
         user_id: uid,
@@ -47,9 +57,55 @@ const EventCreation = () => {
   }
 
   return (
-    <div>
-      Event Creation
-    </div>
+
+    <Box
+      sx={{
+        display: "flex",
+        maxWidth: "1200px",
+        width: "80%",
+        margin: "0 auto",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between"
+      }}
+
+    >
+
+      <Typography
+        sx={{
+          alignSelf: "flex-start"
+        }}
+      >
+        Title
+      </Typography>
+      <TextField
+        onChange={handleTitleChange}
+        sx={{
+          width: "100%"
+        }}
+        />
+
+      <Typography>
+        Description
+      </Typography>
+      <TextField 
+        onChange={handleDescriptionChange}
+        />
+
+      <Button
+        onClick={handleEventSubmit}
+        sx={{
+          borderWidth: "1px",
+          borderRadius: "50%",
+          borderColor: "black",
+
+        }}
+      >
+        Create Event
+      </Button>
+
+
+    </Box>
   )
 }
 
