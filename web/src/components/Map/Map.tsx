@@ -17,12 +17,12 @@ type Coor = {
 
 type Props = {
   coords: Coor[];
-  displayPin: boolean;
-  updatePin: () => void;
+  pinCoord: Coor|null;
+  updatePin?: (lat: number, long: number) => void;
 }
 
 export function GeoMap(props: Props) {
-  const { coords, updatePin } = props;
+  const { coords, pinCoord, updatePin } = props;
   const [currCoor, setCurrCoor] = React.useState<Coor|null>(null)
   const [centerCoor, setCenterCoor] = React.useState<Coor>(defaultCoor);
 
@@ -48,9 +48,15 @@ export function GeoMap(props: Props) {
     setCenterCoor({latitude, longitude});
   }
 
+  const handleClick = (e: any) => {
+    const {lng, lat} = e.lngLat;
+    if (updatePin) updatePin(lat, lng);
+  }
+
   return (
     <Map
       onMove={handleMove}
+      onClick={handleClick}
       initialViewState={{ zoom: 14 }}
       {...centerCoor}
       style={{ width: '100%', height: '100%' }}
@@ -71,6 +77,14 @@ export function GeoMap(props: Props) {
         color='gold'
         {...currCoor}
       />
+      {
+        pinCoord &&
+        <Marker
+          color='green'
+          {...pinCoord}
+        />
+      }
+      
     </Map>
   );
 }
