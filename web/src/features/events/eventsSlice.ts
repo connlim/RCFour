@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { getDistance } from 'geolib';
 import EventService, {
 	EventCreationData,
 	EventData,
+	EventLocationData,
 } from '../../services/EventService';
+import { RootState } from '../app/store';
 
 interface EventsState {
 	events: EventData[];
 	eventInFocus?: EventData | null;
+	locationData?: EventLocationData;
 }
 
 const initialState: EventsState = {
@@ -37,6 +41,15 @@ const eventsSlice = createSlice({
 			});
 	},
 });
+
+export const selectEventsByLocation = (state: RootState) => {
+	return state.events.events.filter(
+		(e) =>
+			!state.events.locationData ||
+			getDistance(e.location, state.events.locationData.location) <=
+				state.events.locationData.radius,
+	);
+};
 
 export default eventsSlice.reducer;
 
