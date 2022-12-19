@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { signIn, mySignOut } from '../../firebase/auth';
@@ -21,24 +22,22 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { useAppDispatch, useAppSelector } from '../../features/app/hooks';
 import { selectUser, setUser } from '../../features/user/userSlice';
 
-const title = "RC4Friends";
-const pages = ['Quests'];
-const pagesRedirect = ['/quest'];
-const settings = ['Profile', 'Logout'];
-const settingsRedirect = ['/profile', null];
+
 
 function Nav() {
+  
+
+
   const dispatch = useAppDispatch();
 	const user = useAppSelector(selectUser);
-
-	onAuthStateChanged(auth, (user) => {
-		dispatch(setUser(user));
-		// https://firebase.google.com/docs/reference/js/firebase.User
-	});
-
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  
+  onAuthStateChanged(auth, (user) => {
+		dispatch(setUser(user));
+		// https://firebase.google.com/docs/reference/js/firebase.User
+	});
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -58,13 +57,22 @@ function Nav() {
   const handleRedirect = (url: string|null) => {
     if (url != null) navigate(url);
   }
-  {user?.uid === '' ? (
-    <button onClick={() => signIn()}>Sign In</button>
-  ) : (
-    <button onClick={() => mySignOut()}>Sign Out</button>
-  )}
-  <button onClick={() => addEvent()}>Add event</button>
-
+  
+  const LoggedIn = user?.uid === '';
+  const title = "RC4Friends";
+  // Logged In
+  const tabs = LoggedIn 
+    ? ['Add Event']
+    : [];
+  const tabsClick = LoggedIn
+    ? [addEvent]
+    : [];
+  const settings = LoggedIn
+    ? ['Sign Out']
+    : ['Sign In'];
+  const settingsClick = LoggedIn
+    ? [signIn]
+    : [mySignOut];
 
   return (
     <AppBar position="static">
@@ -118,11 +126,17 @@ function Nav() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              {tabs.map((tab, i) => (
+                  <MenuItem 
+                    key={i} 
+                    onClick={() => {
+                      tabsClick[i]();
+                      handleCloseNavMenu();
+                    }}>
+                    <Typography textAlign="center">{tab}</Typography>
+                  </MenuItem>
+                ))
+              }
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -145,16 +159,16 @@ function Nav() {
             {title}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page, i) => (
+            {tabs.map((tab, i) => (
               <Button
-                key={page}
+                key={i}
                 onClick={() => {
-                  handleRedirect(pagesRedirect[i]);
+                  tabsClick[i]();
                   handleCloseNavMenu();
                 }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {tab}
               </Button>
             ))}
           </Box>
@@ -183,9 +197,9 @@ function Nav() {
             >
               {settings.map((setting, i) => (
                 <MenuItem 
-                  key={setting} 
+                  key={i} 
                   onClick={()=>{
-                    handleRedirect(settingsRedirect[i])
+                    settingsClick[i]();
                     handleCloseUserMenu();
                   }}
                 >
