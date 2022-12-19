@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signIn, mySignOut } from "../../firebase/auth";
+import { addEvent } from "../../firebase/functions/events/FirebaseEventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged } from "@firebase/auth";
 
@@ -22,6 +23,7 @@ const Nav = () => {
       ) : (
         <button onClick={() => mySignOut()}>Sign Out</button>
       )}
+      <button onClick={() => addEvent()}>Add event</button>
     </div>
   );
 };
