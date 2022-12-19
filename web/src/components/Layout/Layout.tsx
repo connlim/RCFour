@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
 import Nav from "./Nav";
 import Footer from "./Footer";
 import { Box } from "@mui/material";
 
 type LayoutProps = {
-  children: React.ReactNode
-}
+	children: React.ReactNode;
+};
 
 const Layout = (props: LayoutProps) => {
   return (
@@ -23,4 +23,4 @@ const Layout = (props: LayoutProps) => {
   )
 }
 
-export default Layout
+export default Layout;

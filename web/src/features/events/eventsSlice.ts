@@ -30,9 +30,17 @@ const eventsSlice = createSlice({
 	},
 	extraReducers(builder) {
 		builder
+			.addCase(getEvents.pending, (state, action) => {
+				state.lifecycleStatus = 'loading';
+			})
 			.addCase(getEvents.fulfilled, (state, action) => {
+				state.lifecycleStatus = 'success';
 				state.events = action.payload;
 			})
+			.addCase(getEvents.rejected, (state, action) => {
+				state.lifecycleStatus = 'error';
+			});
+		builder
 			.addCase(createEvent.fulfilled, (state, action) => {
 				state.events.push(action.payload);
 			})
