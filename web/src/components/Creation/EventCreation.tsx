@@ -74,12 +74,11 @@ const EventCreation = () => {
         width: "80%",
         margin: "0 auto",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "left",
         justifyContent: "space-between",
         padding: "1rem",
         border: 2,
       }}
-
     >
 
       <Typography
@@ -89,6 +88,7 @@ const EventCreation = () => {
       >
         Title
       </Typography>
+
       <TextField
         onChange={handleTitleChange}
         sx={{
@@ -96,27 +96,28 @@ const EventCreation = () => {
         }}
         />
 
-      <Typography>
+      <Typography marginTop={"1rem"}>
         Description
       </Typography>
+
       <TextField 
         onChange={handleDescriptionChange}
         />
-
-
 
       <Button
         onClick={handleEventSubmit}
         // variant="outlined"
         sx={{
           border: 1,
-          borderRadius: "10%",
-          borderColor: "black"
+          width: 200,
+          alignSelf: "center",
+          borderRadius: 100,
+          borderColor: "black",
+          marginTop: "1rem", 
         }}
       >
         Create Event
       </Button>
-
 
     </Box>
   )
