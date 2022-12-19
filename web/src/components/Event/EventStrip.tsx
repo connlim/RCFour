@@ -1,9 +1,10 @@
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
+import { EventData } from '../../services/EventService';
 import UserService from '../../services/UserService';
 import AppEvent from '../../types/event.app';
 
 export interface EventStripProps {
-	event: AppEvent;
+	event: EventData;
 }
 
 const EventStrip = ({ event }: EventStripProps) => {
@@ -16,10 +17,11 @@ const EventStrip = ({ event }: EventStripProps) => {
 						direction="row"
 						spacing={1}
 						divider={<Divider orientation="vertical" flexItem />}>
-						{[event.organiser, event.timestamp].map((s) => (
+						{[event.user_id, event.timestamp].map((s) => (
 							<Typography variant="caption">{s}</Typography>
 						))}
 					</Stack>
+					<Typography>{event.description}</Typography>
 				</Stack>
 			</CardContent>
 		</Card>

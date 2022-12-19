@@ -1,26 +1,33 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getDistance } from 'geolib';
 import EventService, {
 	EventCreationData,
 	EventData,
 	EventLocationData,
 } from '../../services/EventService';
+import { LifecycleStatus } from '../../types/common';
 import { RootState } from '../app/store';
 
 interface EventsState {
+	lifecycleStatus: LifecycleStatus;
 	events: EventData[];
 	eventInFocus?: EventData | null;
 	locationData?: EventLocationData;
 }
 
 const initialState: EventsState = {
+	lifecycleStatus: 'initial',
 	events: [],
 };
 
 const eventsSlice = createSlice({
 	name: 'events',
 	initialState,
-	reducers: {},
+	reducers: {
+		setLocation: (state, action: PayloadAction<EventLocationData>) => {
+			state.locationData = action.payload;
+		},
+	},
 	extraReducers(builder) {
 		builder
 			.addCase(getEvents.fulfilled, (state, action) => {
