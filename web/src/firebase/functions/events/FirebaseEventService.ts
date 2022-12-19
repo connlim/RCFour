@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, updateDoc, getDoc, getDocs, deleteDoc, GeoPoint } from "@firebase/firestore";
+import { doc, collection, addDoc, setDoc, getDoc, getDocs, deleteDoc, GeoPoint } from "@firebase/firestore";
 
 import { db } from "../../init";
 import { EventCreationData, EventData, Geopoint } from "../../../services/EventService";
@@ -84,7 +84,7 @@ export async function addEvent(data: EventCreationData) {
 
 export async function updateEvent(data: EventData) {
   try {
-    const newEvent = await addDoc(collection(db, eventsCollection), {
+    const newEvent = await setDoc(doc(db, eventsCollection, data.event_id), {
       title: data.title,
       description: data.description,
       organiser: data.user_id,
@@ -93,7 +93,7 @@ export async function updateEvent(data: EventData) {
       attendees: data.attendees_ids,
       attendees_names: data.attendees_names,
     });
-    console.log("Updated event with ID: ", newEvent.id);
+    console.log("Updated event with ID: ", data.event_id);
 
   } catch (e) {
     console.log("Error updating event: ", data.event_id)
