@@ -71,8 +71,8 @@ function Nav() {
     ? ['Sign Out']
     : ['Sign In'];
   const settingsClick = LoggedIn
-    ? [signIn]
-    : [mySignOut];
+    ? [mySignOut]
+    : [signIn];
 
   return (
     <AppBar position="static">
