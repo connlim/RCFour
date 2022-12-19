@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Map, {
 	MapLayerMouseEvent,
+	MapProps,
+	MapRef,
 	Marker,
 	ViewStateChangeEvent,
 } from 'react-map-gl';
@@ -25,13 +27,25 @@ type Coor = {
 	longitude: number;
 };
 
-type Props = {
+interface Props extends MapProps {
 	markers?: (JSX.Element | Element | null)[];
-};
+	flyTo?: Coor;
+}
 
-export function GeoMap({ markers }: Props) {
+export function GeoMap({ markers, flyTo }: Props) {
 	const dispatch = useAppDispatch();
 	const { dragLocation } = useAppSelector((state) => state.events);
+	const ref = React.useRef<MapRef | null>(null);
+
+	React.useEffect(() => {
+		if (flyTo) {
+			ref.current?.flyTo({
+				center: [flyTo.longitude, flyTo.latitude],
+				duration: 2000,
+				zoom: 14,
+			});
+		}
+	}, [flyTo]);
 
 	const handleMove = (e: ViewStateChangeEvent) => {
 		const { latitude, longitude, zoom } = e.viewState;
@@ -45,6 +59,7 @@ export function GeoMap({ markers }: Props) {
 
 	return (
 		<Map
+			ref={ref}
 			onMove={handleMove}
 			onClick={handleClick}
 			initialViewState={{ zoom: 14 }}
