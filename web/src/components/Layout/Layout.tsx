@@ -19,6 +19,7 @@ const Layout = (props: LayoutProps) => {
     >
       <Nav />
       <main>{props.children}</main>
+      <Footer />
     </Box>
   )
 }

@@ -19,6 +19,8 @@ import { addEvent, getAllEvents, getEventById } from "../../firebase/functions/e
 import { mockCreationData, mockEventData } from "../../services/EventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
+import EventCreationButton from "../Creation/EventCreationButton";
+import SignInButton from "../Shared/SignInButton";
 
 function Nav() {
   const navigate = useNavigate();
@@ -67,11 +69,7 @@ function Nav() {
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
   return (
-    <AppBar position="static"
-      sx={{
-        marginBottom: "2rem"
-      }}
-    >
+    <AppBar position="static" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -92,6 +90,7 @@ function Nav() {
           >
             {title}
           </Typography>
+
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -154,6 +153,7 @@ function Nav() {
           >
             {title}
           </Typography>
+              
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {tabs.map((tab, i) => (
               <Button
@@ -172,7 +172,7 @@ function Nav() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="/avatar.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -204,6 +204,10 @@ function Nav() {
               ))}
             </Menu>
           </Box>
+            {!LoggedIn && 
+            <SignInButton />
+        }
+          <EventCreationButton />
         </Toolbar>
       </Container>
     </AppBar>

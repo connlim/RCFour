@@ -1,13 +1,18 @@
+import { Box } from "@mui/material";
 import React from "react";
 import EventCreation from "./EventCreation";
 import QuestCreation from "./QuestCreation";
 
 const Creation = () => {
   return (
-    <React.Fragment>
+    <Box
+      sx={{
+        marginBottom: "2rem"
+      }}
+    >
       <EventCreation />
       <QuestCreation />
-    </React.Fragment>
+    </Box>
   )
 }
 
