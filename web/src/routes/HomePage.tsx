@@ -10,7 +10,6 @@ const HomePage = () => {
 				height: '80vh',
 			}}>
 			<MainMap />
-			<EventList></EventList>
 		</Box>
 	);
 };

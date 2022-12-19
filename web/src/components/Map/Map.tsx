@@ -13,6 +13,8 @@ import {
 	setDragLocation,
 	setMarkLocation,
 } from '../../features/events/eventsSlice';
+import { Fab } from '@mui/material';
+import { NearMe } from '@mui/icons-material';
 
 const token =
 	'pk.eyJ1IjoiYnJvc2VwaDAiLCJhIjoiY2twbDFiYWptMWdocDJucDliNHJsNThobiJ9.3w6p_pdYAMBaKnFMhb1SSQ';
@@ -21,6 +23,9 @@ const defaultCoor: Coor = {
 	longitude: -122.4,
 	latitude: 37.8,
 };
+
+const FLY_DURATION = 1000;
+const DEFAULT_ZOOM = 15;
 
 type Coor = {
 	latitude: number;
@@ -34,15 +39,17 @@ interface Props extends MapProps {
 
 export function GeoMap({ markers, flyTo }: Props) {
 	const dispatch = useAppDispatch();
-	const { dragLocation } = useAppSelector((state) => state.events);
+	const { dragLocation, currLocation } = useAppSelector(
+		(state) => state.events,
+	);
 	const ref = React.useRef<MapRef | null>(null);
 
 	React.useEffect(() => {
 		if (flyTo) {
 			ref.current?.flyTo({
 				center: [flyTo.longitude, flyTo.latitude],
-				duration: 2000,
-				zoom: 14,
+				duration: FLY_DURATION,
+				zoom: DEFAULT_ZOOM,
 			});
 		}
 	}, [flyTo]);
@@ -57,16 +64,35 @@ export function GeoMap({ markers, flyTo }: Props) {
 		dispatch(setMarkLocation({ latitude: lat, longitude: lng }));
 	};
 
+	const handleFlyToCurrent = () => {
+		if (currLocation) {
+			ref.current?.flyTo({
+				center: [currLocation.longitude, currLocation.latitude],
+				duration: FLY_DURATION,
+				zoom: DEFAULT_ZOOM,
+			});
+		}
+	};
+
 	return (
 		<Map
 			ref={ref}
 			onMove={handleMove}
 			onClick={handleClick}
-			initialViewState={{ zoom: 14 }}
 			{...(dragLocation ?? defaultCoor)}
 			mapStyle="mapbox://styles/mapbox/streets-v9"
 			mapboxAccessToken={token}>
 			{markers}
+			<Fab
+				disabled={!currLocation}
+				onClick={handleFlyToCurrent}
+				sx={{
+					position: 'absolute',
+					right: (theme) => theme.spacing(2),
+					bottom: (theme) => theme.spacing(2),
+				}}>
+				<NearMe />
+			</Fab>
 		</Map>
 	);
 }

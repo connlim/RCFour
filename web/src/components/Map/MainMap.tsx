@@ -1,5 +1,5 @@
 import { Card, Stack } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Marker } from 'react-map-gl';
 import { useAppSelector } from '../../features/app/hooks';
 import { MapLocation } from '../../features/events/eventsSlice';
@@ -12,7 +12,6 @@ export default function MainMap() {
 	const [initFly, setInitFly] = useState<MapLocation>();
 
 	useEffect(() => {
-		console.log(initFly);
 		if (!initFly && currLocation) {
 			setInitFly({
 				latitude: currLocation.latitude,
@@ -34,6 +33,15 @@ export default function MainMap() {
 		) : null;
 	});
 
+	const markers = useMemo(
+		() => [
+			...eventMarkers,
+			<ClickMarker key="clickclickclick" />,
+			<CurrentMarker key="im_here" />,
+		],
+		[eventMarkers],
+	);
+
 	return (
 		<Stack direction="column" height="100%" alignItems="center">
 			<Card
@@ -41,14 +49,7 @@ export default function MainMap() {
 					height: '80%',
 					width: '80%',
 				}}>
-				<GeoMap
-					flyTo={initFly}
-					markers={[
-						...eventMarkers,
-						<ClickMarker key="clickclickclick" />,
-						<CurrentMarker key="im_here" />,
-					]}
-				/>
+				<GeoMap flyTo={initFly} markers={markers} />
 			</Card>
 		</Stack>
 	);
