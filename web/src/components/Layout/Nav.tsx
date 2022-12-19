@@ -13,12 +13,14 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signIn, mySignOut } from "../../firebase/auth";
 import { addEvent, getAllEvents, getEventById } from "../../firebase/functions/events/FirebaseEventService";
 import { mockCreationData, mockEventData } from "../../services/EventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
+import EventCreationButton from "../Creation/EventCreationButton";
+import SignInButton from "../Shared/SignInButton";
 
 function Nav() {
   const navigate = useNavigate();
@@ -62,12 +64,12 @@ function Nav() {
   const title = "RC4Friends";
   // Logged In
   const tabs = LoggedIn ? ["Get All Event"] : [];
-  const tabsClick = LoggedIn ? [() => getEventById("auo8bMXpghi4BQvXOR9b")] : [];
+  const tabsClick = LoggedIn ? [() => getAllEvents()] : [];
   const settings = LoggedIn ? ["Sign Out"] : ["Sign In"];
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -88,6 +90,7 @@ function Nav() {
           >
             {title}
           </Typography>
+
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -150,6 +153,7 @@ function Nav() {
           >
             {title}
           </Typography>
+              
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {tabs.map((tab, i) => (
               <Button
@@ -168,7 +172,7 @@ function Nav() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="/avatar.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -187,6 +191,9 @@ function Nav() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem onClick={() => navigate("/profile")}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
               {settings.map((setting, i) => (
                 <MenuItem
                   key={i}
@@ -200,6 +207,10 @@ function Nav() {
               ))}
             </Menu>
           </Box>
+            {!LoggedIn && 
+            <SignInButton />
+        }
+          <EventCreationButton />
         </Toolbar>
       </Container>
     </AppBar>

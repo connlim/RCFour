@@ -12,9 +12,7 @@ const EventCreation = () => {
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [lat, setLat] = useState(-123)
-  const [lng, setLng] = useState(123)
-  const [location, setLocation] = useState("")
+  const [geopoint, setGeopoint] = useState()
 
   const handleTitleChange = (event: any) => {
     const target = event.target
@@ -35,9 +33,17 @@ const EventCreation = () => {
     const eventService = new EventService()
 
     const uid = auth.currentUser?.uid;
+
     if(uid === undefined) {
       return;
     }
+
+    // if(geopoint === undefined) {
+    //   console.log("input lat long")
+    //   return
+    // }
+
+
 
     const sendEvent = async () => {
 
@@ -48,9 +54,9 @@ const EventCreation = () => {
         description: description,
         timestamp: Date.now().toString(),
         location: {
-          lat: lat,
-          lng: lng,
-        }
+          lat: 12,
+          lng: 12,
+        },
       }
 
       try {
@@ -73,67 +79,76 @@ const EventCreation = () => {
         width: "80%",
         margin: "0 auto",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-between"
+        alignItems: "left",
+        justifyContent: "space-between",
+        padding: "1rem",
+        border: 2,
+        gap: "1rem",
       }}
-
     >
+
+      <Box>
 
       <Typography
         sx={{
-          alignSelf: "flex-start"
+          alignSelf: "flex-start",
+          fontFamily:"Roboto",
+          fontSize: "18px",
         }}
       >
         Title
       </Typography>
+
       <TextField
         onChange={handleTitleChange}
         sx={{
           width: "100%"
         }}
         />
+      </Box>
 
-      <Typography>
+        <Box>
+
+      <Typography 
+        sx={{
+          alignSelf: "flex-start",
+          fontFamily:"Roboto",
+          fontSize: "18px",
+        }}
+      >
         Description
       </Typography>
+
       <TextField 
         onChange={handleDescriptionChange}
+          multiline
+          minRows={4}
         sx={{
-          width: "100%"
+          width: "100%",
         }}
         />
-
-      <Typography>
-        Location
-      </Typography>
-      <Grid container spacing={1}>
-        <Grid item xs={8}>
-          <TextField
-            value={location}
-            onChange={handleLocationChange}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Button>
-            Search Location
-          </Button>
-        </Grid>
-      </Grid>
-        
-      
 
       <Button
         onClick={handleEventSubmit}
         sx={{
-          borderWidth: "1px",
-          borderRadius: "50%",
+          border: 1,
+          width: 200,
+          alignSelf: "center",
+          // borderRadius: 100,
           borderColor: "black",
+          marginTop: "1rem", 
+          color: "black",
+          borderRadius: "0",
+          marginLeft: "1rem",
+          textTransform: "none",
+          fontSize: "1rem",
+          fontWeight: "600",
+          letterSpacing: "1px"
 
         }}
       >
         Create Event
       </Button>
-
 
     </Box>
   )
