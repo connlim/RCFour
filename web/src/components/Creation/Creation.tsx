@@ -7,7 +7,7 @@ const Creation = () => {
   return (
     <Box
       sx={{
-        marginBottom: "2rem"
+        marginTop: "2rem"
       }}
     >
       <EventCreation />
