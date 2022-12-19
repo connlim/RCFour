@@ -16,7 +16,7 @@ type Coor = {
 }
 
 type Props = {
-  coords: Coor[];
+  coords?: Coor[];
   pinCoord: Coor|null;
   updatePin?: (lat: number, long: number) => void;
 }
@@ -64,6 +64,7 @@ export function GeoMap(props: Props) {
       mapboxAccessToken={token}
     >
       {
+        coords !== undefined && 
         coords.map(coor => {
           return (
             <Marker

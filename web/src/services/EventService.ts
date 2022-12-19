@@ -1,3 +1,5 @@
+import { getAllEvents, getEventById, addEvent } from "../firebase/functions/events/FirebaseEventService"
+
 export interface Geopoint {
 	lat: number;
 	lng: number;
@@ -65,15 +67,23 @@ export const mockEventLocationData: EventLocationData = {
 class EventService {
 	// get all Events
 	public async getEvents(): Promise<EventData[]> {
-		//
-		return [mockEventData, mockEventData];
+    try {
+      const res = await getAllEvents()
+      return res;
+    } catch (error) {
+      console.log(error)
+      return []
+    }
 	}
 
 	// get Event by id
-	public async getEvent(id: string): Promise<EventData> {
-		//
-		// const res = await firebaseFunctionGetEvent(id);
-		return mockEventData;
+	public async getEvent(id: string): Promise<EventData | undefined> {
+    try {
+      const res = await getEventById(id)
+      return res;
+    } catch (error) {
+      console.log(error)
+    }
 	}
 
 	public async getEventsByLoc(data: EventLocationData): Promise<EventData[]> {
@@ -82,11 +92,13 @@ class EventService {
 
 	// create Event
 	public async createEvent(data: EventCreationData): Promise<EventData> {
-		// logic here (something like the below)
-		// const res = firebase.functions.user.getUser()
-
-		// redux update state?
-		// another option is to update redux state via the useEffect that calls this enclosing function
+    // add event
+    try {
+      await addEvent(data)
+      console.log("event added successfully")
+    } catch (error) {
+      console.log(error)
+    }
 
 		return mockEventData;
 	}

@@ -62,7 +62,7 @@ function Nav() {
   const title = "RC4Friends";
   // Logged In
   const tabs = LoggedIn ? ["Get All Event"] : [];
-  const tabsClick = LoggedIn ? [() => getEventById("auo8bMXpghi4BQvXOR9b")] : [];
+  const tabsClick = LoggedIn ? [() => getAllEvents()] : [];
   const settings = LoggedIn ? ["Sign Out"] : ["Sign In"];
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
