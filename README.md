@@ -32,3 +32,6 @@
 
 <!-- - [ ] vibes -->
 
+## Database
+
+![](database_diagram.png)
