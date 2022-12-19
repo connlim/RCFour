@@ -1,14 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import eventsReducer from '../events/eventsSlice';
-import questsReducer from '../quests/questsSlice';
-import userReducer from '../user/userSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import eventsReducer from "../events/eventsSlice";
+import questsReducer from "../quests/questsSlice";
 
 const store = configureStore({
-	reducer: {
-		events: eventsReducer,
-		quests: questsReducer,
-		user: userReducer,
-	},
+  reducer: {
+    events: eventsReducer,
+    quests: questsReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

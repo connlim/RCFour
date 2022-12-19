@@ -3,7 +3,7 @@ import {
   signOut,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { addUserIfNotExist } from "./functions/users/addUser";
+import { addUserIfNotExist } from "./functions/users";
 
 import { auth } from "./init";
 
