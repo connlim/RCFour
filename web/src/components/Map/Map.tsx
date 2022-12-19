@@ -29,6 +29,7 @@ export function GeoMap(props: Props) {
   React.useEffect(() => {
     const id = navigator.geolocation.watchPosition(
       (pos) => {
+        console.log(pos);
         const {latitude, longitude} = pos.coords;
         if (currCoor == null) setCenterCoor({latitude, longitude}); 
         setCurrCoor({latitude, longitude});

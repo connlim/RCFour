@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { 
-  Box, Button, Input, TextField, Typography,
+  Box, Button, Grid, Input, TextField, Typography,
 } from "@mui/material";
 
 import EventService, { EventCreationData } from "../../services/EventService"
@@ -12,6 +12,9 @@ const EventCreation = () => {
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [lat, setLat] = useState(-123)
+  const [lng, setLng] = useState(123)
+  const [location, setLocation] = useState("")
 
   const handleTitleChange = (event: any) => {
     const target = event.target
@@ -21,6 +24,11 @@ const EventCreation = () => {
   const handleDescriptionChange = (event: any) => {
     const target = event.target
     setDescription(target.value)
+  }
+
+  const handleLocationChange = (event: any) => {
+    const target = event.target
+    setLocation(target.value);
   }
 
   const handleEventSubmit = () => {
@@ -40,8 +48,8 @@ const EventCreation = () => {
         description: description,
         timestamp: Date.now().toString(),
         location: {
-          lat: -123,
-          lng: 123,
+          lat: lat,
+          lng: lng,
         }
       }
 
@@ -90,7 +98,29 @@ const EventCreation = () => {
       </Typography>
       <TextField 
         onChange={handleDescriptionChange}
+        sx={{
+          width: "100%"
+        }}
         />
+
+      <Typography>
+        Location
+      </Typography>
+      <Grid container spacing={1}>
+        <Grid item xs={8}>
+          <TextField
+            value={location}
+            onChange={handleLocationChange}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <Button>
+            Search Location
+          </Button>
+        </Grid>
+      </Grid>
+        
+      
 
       <Button
         onClick={handleEventSubmit}
