@@ -8,11 +8,20 @@ import EventService, {
 import { LifecycleStatus } from '../../types/common';
 import { RootState } from '../app/store';
 
+export interface MapLocation {
+	latitude: number;
+	longitude: number;
+	zoom?: number;
+}
+
 interface EventsState {
 	lifecycleStatus: LifecycleStatus;
 	events: EventData[];
 	eventInFocus?: EventData | null;
 	locationData?: EventLocationData;
+	dragLocation?: MapLocation;
+	currLocation?: MapLocation;
+	markLocation?: MapLocation;
 }
 
 const initialState: EventsState = {
@@ -26,6 +35,15 @@ const eventsSlice = createSlice({
 	reducers: {
 		setLocation: (state, action: PayloadAction<EventLocationData>) => {
 			state.locationData = action.payload;
+		},
+		setDragLocation: (state, action: PayloadAction<MapLocation>) => {
+			state.dragLocation = action.payload;
+		},
+		setCurrLocation: (state, action: PayloadAction<MapLocation>) => {
+			state.currLocation = action.payload;
+		},
+		setMarkLocation: (state, action: PayloadAction<MapLocation>) => {
+			state.markLocation = action.payload;
 		},
 	},
 	extraReducers(builder) {
@@ -65,6 +83,9 @@ export const selectEventsByLocation = (state: RootState) => {
 				state.events.locationData.radius,
 	);
 };
+
+export const { setDragLocation, setCurrLocation, setMarkLocation } =
+	eventsSlice.actions;
 
 export default eventsSlice.reducer;
 
