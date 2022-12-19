@@ -7,6 +7,7 @@ import "./firebase/init.ts";
 // routes
 import HomePage from "./routes/HomePage";
 import CreationPage from "./routes/CreationPage";
+import EventDetails from "./components/Event/EventDetails";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path="/create" element={<CreationPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:uid" element={<Profile />} />
+        <Route path="/event/:eventId" element={<EventDetails />} />
       </Routes>
     </Layout>
   );
