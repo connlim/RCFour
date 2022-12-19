@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, setDoc } from "firebase/firestore";
+import { doc, collection, addDoc, setDoc, GeoPoint, FieldValue } from "firebase/firestore";
 
 import { db } from "../../init";
 
@@ -16,8 +16,8 @@ export async function addEvent() {
       title: "Title",
       description: "This is an event",
       organiser: 1815,
-      location: new firebase.firestore.GeoPoint(1.800, 1000),
-      timestamp: new firebase.firestore.FieldValue.serverTimestamp(),
+      location: new GeoPoint(1.800, 1000),
+      timestamp: new FieldValue.serverTimestamp(),
       attendees: [],
       attendees_names: [],
     });
