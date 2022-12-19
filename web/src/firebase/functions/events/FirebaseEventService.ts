@@ -1,10 +1,12 @@
-import { doc, collection, addDoc, setDoc, getDoc, getDocs, GeoPoint, serverTimestamp } from "@firebase/firestore";
+import { doc, collection, addDoc, setDoc, getDoc, getDocs, deleteDoc, GeoPoint } from "@firebase/firestore";
 
 import { db } from "../../init";
 import { EventCreationData, EventData, Geopoint } from "../../../services/EventService";
 
+const eventsCollection: string = "events";
+
 export async function getAllEvents() {
-  const querySnapshot = await getDocs(collection(db, "events"));
+  const querySnapshot = await getDocs(collection(db, eventsCollection));
 
   const result : EventData[] = [];
   querySnapshot.forEach((doc) => {
@@ -33,7 +35,7 @@ export async function getAllEvents() {
 }
 
 export async function getEventById(id: string) {
-  const eventRef = doc(db, "events", id);
+  const eventRef = doc(db, eventsCollection, id);
   const eventSnap = await getDoc(eventRef);
   
   if (!eventSnap.exists()) {
@@ -57,14 +59,14 @@ export async function getEventById(id: string) {
       attendees_ids: data.attendees,
       attendees_names: data.attendees_names,
     };
-    
+
     return result;
   }
 }
 
 export async function addEvent(data: EventCreationData) {
   try {
-    const newEvent = await addDoc(collection(db, "events"), {
+    const newEvent = await addDoc(collection(db, eventsCollection), {
       title: data.title,
       description: data.description,
       organiser: data.user_id,
@@ -76,10 +78,34 @@ export async function addEvent(data: EventCreationData) {
     console.log("Add new event with ID: ", newEvent.id);
 
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error adding event: ", e);
   }
 }
 
-export function deleteEvent() {
+export async function updateEvent(data: EventData) {
+  try {
+    const newEvent = await setDoc(doc(db, eventsCollection, data.event_id), {
+      title: data.title,
+      description: data.description,
+      organiser: data.user_id,
+      location: new GeoPoint(data.location.lat, data.location.lng),
+      timestamp: data.timestamp,
+      attendees: data.attendees_ids,
+      attendees_names: data.attendees_names,
+    });
+    console.log("Updated event with ID: ", data.event_id);
 
+  } catch (e) {
+    console.log("Error updating event: ", data.event_id)
+  }
+}
+
+export async function deleteEvent(id: string) {
+  try {
+    await deleteDoc(doc(db, eventsCollection, id));
+    console.log("Successfully deleted event: ", id);
+
+  } catch (e) {
+    console.log("Error deleting event: ", id);
+  }
 }
