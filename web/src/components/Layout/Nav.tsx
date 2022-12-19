@@ -10,7 +10,8 @@ const Nav = () => {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(selectUser);
 
-	onAuthStateChanged(auth, (user) => {
+	auth.onAuthStateChanged( (user) => {
+    console.log("state change")
 		dispatch(setUser(user));
 		// https://firebase.google.com/docs/reference/js/firebase.User
 	});
@@ -18,7 +19,7 @@ const Nav = () => {
 	return (
 		<div>
 			Nav Bar
-			{user?.uid === '' ? (
+			{user === null ? (
 				<button onClick={() => signIn()}>Sign In</button>
 			) : (
 				<button onClick={() => mySignOut()}>Sign Out</button>

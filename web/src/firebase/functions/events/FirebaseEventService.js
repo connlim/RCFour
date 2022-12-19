@@ -17,7 +17,7 @@ export async function addEvent() {
       description: "This is an event",
       organiser: 1815,
       location: new GeoPoint(1.800, 1000),
-      timestamp: new FieldValue.serverTimestamp(),
+      timestamp: 1000,
       attendees: [],
       attendees_names: [],
     });
