@@ -2,6 +2,7 @@ import React from "react";
 
 import Nav from "./Nav";
 import Footer from "./Footer";
+import { Box } from "@mui/material";
 
 type LayoutProps = {
   children: React.ReactNode
@@ -9,10 +10,16 @@ type LayoutProps = {
 
 const Layout = (props: LayoutProps) => {
   return (
-    <div>
+    <Box
+      sx={{
+        margin: "0 auto",
+        overflowX: "hidden",
+        boxSizing: "content-box",
+      }}
+    >
       <Nav />
       <main>{props.children}</main>
-    </div>
+    </Box>
   )
 }
 

@@ -66,7 +66,11 @@ const EventCreation = () => {
         margin: "0 auto",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        padding: "1rem",
+        border: 2,
+
+
       }}
 
     >
@@ -94,11 +98,11 @@ const EventCreation = () => {
 
       <Button
         onClick={handleEventSubmit}
+        // variant="outlined"
         sx={{
-          borderWidth: "1px",
-          borderRadius: "50%",
-          borderColor: "black",
-
+          border: 1,
+          borderRadius: "10%",
+          borderColor: "black"
         }}
       >
         Create Event

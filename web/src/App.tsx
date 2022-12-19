@@ -2,10 +2,10 @@ import React from "react"
 import { Route, Routes } from "react-router-dom"
 import Layout from "./components/Layout/Layout"
 import "./firebase/init.ts"
-import CreationPage from "./routes/CreationPage"
 
 // routes
 import HomePage from "./routes/HomePage"
+import CreationPage from "./routes/CreationPage"
 
 const App: React.FC = () => {
   return (
