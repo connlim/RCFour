@@ -24,9 +24,12 @@ import { selectUser, setUser } from '../../features/user/userSlice';
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	auth.onAuthStateChanged( (user) => {
     console.log("state change")
 =======
+=======
+>>>>>>> 7f42010d7e060f1b069b1608b5476adfaccfb89e
 
 function Nav() {
   
@@ -39,11 +42,15 @@ function Nav() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   
   onAuthStateChanged(auth, (user) => {
+<<<<<<< HEAD
+>>>>>>> 7f42010d7e060f1b069b1608b5476adfaccfb89e
+=======
 >>>>>>> 7f42010d7e060f1b069b1608b5476adfaccfb89e
 		dispatch(setUser(user));
 		// https://firebase.google.com/docs/reference/js/firebase.User
 	});
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	return (
 		<div>
@@ -58,12 +65,17 @@ function Nav() {
 	);
 };
 =======
+=======
+>>>>>>> 7f42010d7e060f1b069b1608b5476adfaccfb89e
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
+<<<<<<< HEAD
+>>>>>>> 7f42010d7e060f1b069b1608b5476adfaccfb89e
+=======
 >>>>>>> 7f42010d7e060f1b069b1608b5476adfaccfb89e
 
   const handleCloseNavMenu = () => {
