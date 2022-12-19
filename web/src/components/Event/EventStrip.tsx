@@ -1,4 +1,5 @@
 import { Card, CardContent, Divider, Stack, Typography } from '@mui/material';
+import UserService from '../../services/UserService';
 import AppEvent from '../../types/event.app';
 
 export interface EventStripProps {

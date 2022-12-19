@@ -1,4 +1,10 @@
-// interface 
+// export interface QuestCreationData {
+//
+// }
+
+// export interface QuestRetrievalData {
+//
+// }
 
 class QuestService {
 
@@ -8,8 +14,9 @@ class QuestService {
   }
 
   // get quest by id
-  public async getQuest() {
-
+  public async getQuest(id: number) {
+    // 
+    // const res = await firebaseFunctionGetQuest(id);
   }
 
   // create quest
@@ -19,7 +26,6 @@ class QuestService {
 
     // redux update state?
     // another option is to update redux state via the useEffect that calls this enclosing function
-    
   }
 
 }
