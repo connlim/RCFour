@@ -15,7 +15,8 @@ import AdbIcon from "@mui/icons-material/Adb";
 
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, mySignOut } from "../../firebase/auth";
-import { addEvent } from "../../firebase/functions/events/FirebaseEventService";
+import { addEvent, getAllEvents, getEventById } from "../../firebase/functions/events/FirebaseEventService";
+import { mockCreationData, mockEventData } from "../../services/EventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
 
@@ -60,13 +61,17 @@ function Nav() {
   const LoggedIn = uid !== "";
   const title = "RC4Friends";
   // Logged In
-  const tabs = LoggedIn ? ["Add Event"] : [];
-  const tabsClick = LoggedIn ? [addEvent] : [];
+  const tabs = LoggedIn ? ["Get All Event"] : [];
+  const tabsClick = LoggedIn ? [() => getAllEvents()] : [];
   const settings = LoggedIn ? ["Sign Out"] : ["Sign In"];
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
   return (
-    <AppBar position="static">
+    <AppBar position="static"
+      sx={{
+        marginBottom: "2rem"
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />

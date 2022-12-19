@@ -1,34 +1,75 @@
 import { doc, collection, addDoc, setDoc, getDoc, getDocs, GeoPoint, serverTimestamp } from "@firebase/firestore";
 
 import { db } from "../../init";
-import { EventCreationData, EventData } from "../../../services/EventService";
+import { EventCreationData, EventData, Geopoint } from "../../../services/EventService";
 
 export async function getAllEvents() {
   const querySnapshot = await getDocs(collection(db, "events"));
+
+  const result : EventData[] = [];
   querySnapshot.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`);
+    const id: string = doc.id;
+    const data = doc.data();
+    console.log(`${doc.id} => ${doc.data().location.latitude}`);
+
+    const loc: Geopoint = {
+      lat: data.location.latitude, // Can be undefined
+      lng: data.location.longitude // Can be undefined
+    }
+    
+    const event: EventData = {
+      event_id: id,
+      user_id: data.organiser,
+      title: data.title,
+      description: data.description,
+      timestamp: data.timestamp,
+      location: loc,
+      attendees_ids: data.attendees,
+      attendees_names: data.attendees_names,
+    };
+    result.push(event);
   });
-} 
+  return result;
+}
 
 export async function getEventById(id: string) {
   const eventRef = doc(db, "events", id);
   const eventSnap = await getDoc(eventRef);
   
-  if (eventSnap.exists()) {
-    console.log("Document data:", eventSnap.data());
-  } else {
+  if (!eventSnap.exists()) {
     console.log("No such document!", id);
+  } else {
+    const data = eventSnap.data();
+    console.log("Document data:", data);
+
+    const loc: Geopoint = {
+      lat: data.location.latitude, // Can be undefined
+      lng: data.location.longitude // Can be undefined
+    }
+
+    const result: EventData = {
+      event_id: id,
+      user_id: data.organiser,
+      title: data.title,
+      description: data.description,
+      timestamp: data.timestamp,
+      location: loc,
+      attendees_ids: data.attendees,
+      attendees_names: data.attendees_names,
+    };
+    
+    return result;
   }
 }
 
-export async function addEvent() {
+export async function addEvent(data: EventCreationData) {
   try {
     const newEvent = await addDoc(collection(db, "events"), {
-      title: "Title",
-      description: "This is an event",
-      organiser: 1815,
-      location: new GeoPoint(1.800, 1000),
-      timestamp: serverTimestamp(),
+      title: data.title,
+      description: data.description,
+      organiser: data.user_id,
+      location: new GeoPoint(data.location.lat, data.location.lng),
+      timestamp: data.timestamp,
       attendees: [],
       attendees_names: [],
     });
@@ -37,4 +78,8 @@ export async function addEvent() {
   } catch (e) {
     console.error("Error adding document: ", e);
   }
+}
+
+export function deleteEvent() {
+
 }

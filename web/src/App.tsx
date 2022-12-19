@@ -3,10 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Profile from "./components/Profile";
 import "./firebase/init.ts";
-import CreationPage from "./routes/CreationPage";
 
 // routes
 import HomePage from "./routes/HomePage";
+import CreationPage from "./routes/CreationPage";
 
 const App: React.FC = () => {
   return (

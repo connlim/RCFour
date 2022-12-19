@@ -12,6 +12,7 @@ const EventCreation = () => {
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [geopoint, setGeopoint] = useState()
 
   const handleTitleChange = (event: any) => {
     const target = event.target
@@ -27,9 +28,17 @@ const EventCreation = () => {
     const eventService = new EventService()
 
     const uid = auth.currentUser?.uid;
+
     if(uid === undefined) {
       return;
     }
+
+    // if(geopoint === undefined) {
+    //   console.log("input lat long")
+    //   return
+    // }
+
+
 
     const sendEvent = async () => {
 
@@ -40,9 +49,9 @@ const EventCreation = () => {
         description: description,
         timestamp: Date.now().toString(),
         location: {
-          lat: -123,
-          lng: 123,
-        }
+          lat: 12,
+          lng: 12,
+        },
       }
 
       try {
@@ -66,7 +75,9 @@ const EventCreation = () => {
         margin: "0 auto",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        padding: "1rem",
+        border: 2,
       }}
 
     >
@@ -92,13 +103,15 @@ const EventCreation = () => {
         onChange={handleDescriptionChange}
         />
 
+
+
       <Button
         onClick={handleEventSubmit}
+        // variant="outlined"
         sx={{
-          borderWidth: "1px",
-          borderRadius: "50%",
-          borderColor: "black",
-
+          border: 1,
+          borderRadius: "10%",
+          borderColor: "black"
         }}
       >
         Create Event
