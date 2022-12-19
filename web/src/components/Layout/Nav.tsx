@@ -25,9 +25,6 @@ import { selectUser, setUser } from '../../features/user/userSlice';
 
 
 function Nav() {
-  
-
-
   const dispatch = useAppDispatch();
 	const user = useAppSelector(selectUser);
   const navigate = useNavigate();
@@ -53,14 +50,9 @@ function Nav() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  const handleRedirect = (url: string|null) => {
-    if (url != null) navigate(url);
-  }
   
   const LoggedIn = user?.uid === '';
-  const title = "RC4Friends";
-  // Logged In
+  const title = "KakiQuest";
   const tabs = LoggedIn 
     ? ['Add Event']
     : [];

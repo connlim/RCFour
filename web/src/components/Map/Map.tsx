@@ -5,26 +5,32 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 const token = 'pk.eyJ1IjoiYnJvc2VwaDAiLCJhIjoiY2twbDFiYWptMWdocDJucDliNHJsNThobiJ9.3w6p_pdYAMBaKnFMhb1SSQ';
 
+const defaultCoor: Coor = {
+  longitude: -122.4,
+  latitude: 37.8
+}
+
 type Coor = {
   latitude: number,
   longitude: number
 }
 
 type Props = {
-  coords: Coor[]
+  coords: Coor[];
+  displayPin: boolean;
+  updatePin: () => void;
 }
 
 export function GeoMap(props: Props) {
-  const { coords } = props;
-  const [currCoor, setCurrCoor] = React.useState<Coor>({
-    longitude: -122.4,
-    latitude: 37.8
-  });
+  const { coords, updatePin } = props;
+  const [currCoor, setCurrCoor] = React.useState<Coor|null>(null)
+  const [centerCoor, setCenterCoor] = React.useState<Coor>(defaultCoor);
 
   React.useEffect(() => {
     const id = navigator.geolocation.watchPosition(
       (pos) => {
         const {latitude, longitude} = pos.coords;
+        if (currCoor == null) setCenterCoor({latitude, longitude}); 
         setCurrCoor({latitude, longitude});
       },
       (err) => console.log(err),
@@ -39,14 +45,14 @@ export function GeoMap(props: Props) {
 
   const handleMove = (e: any) => {
     const {longitude, latitude} = e.viewState;
-    setCurrCoor({latitude, longitude});
+    setCenterCoor({latitude, longitude});
   }
 
   return (
     <Map
       onMove={handleMove}
       initialViewState={{ zoom: 14 }}
-      {...currCoor}
+      {...centerCoor}
       style={{ width: '100%', height: '100%' }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxAccessToken={token}
@@ -55,11 +61,16 @@ export function GeoMap(props: Props) {
         coords.map(coor => {
           return (
             <Marker
+              color='red'
               {...coor}
             />
           )
         })
       }
+      <Marker
+        color='gold'
+        {...currCoor}
+      />
     </Map>
   );
 }

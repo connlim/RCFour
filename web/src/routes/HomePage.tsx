@@ -11,6 +11,8 @@ const HomePage = () => {
     >
       <GeoMap
         coords={[]}
+        displayPin={true}
+        updatePin={()=>{}}
       />
     </Box>
     
