@@ -13,6 +13,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { signIn, mySignOut } from '../../firebase/auth';
+import { addEvent } from "../../firebase/functions/events/FirebaseEventService";
+import { auth } from '../../firebase/init';
+import { onAuthStateChanged } from '@firebase/auth';
+import { useAppDispatch, useAppSelector } from '../../features/app/hooks';
+import { selectUser, setUser } from '../../features/user/userSlice';
 
 const title = "RC4Friends";
 const pages = ['Quests'];
@@ -21,6 +28,14 @@ const settings = ['Profile', 'Logout'];
 const settingsRedirect = ['/profile', null];
 
 function Nav() {
+  const dispatch = useAppDispatch();
+	const user = useAppSelector(selectUser);
+
+	onAuthStateChanged(auth, (user) => {
+		dispatch(setUser(user));
+		// https://firebase.google.com/docs/reference/js/firebase.User
+	});
+
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -43,6 +58,13 @@ function Nav() {
   const handleRedirect = (url: string|null) => {
     if (url != null) navigate(url);
   }
+  {user?.uid === '' ? (
+    <button onClick={() => signIn()}>Sign In</button>
+  ) : (
+    <button onClick={() => mySignOut()}>Sign Out</button>
+  )}
+  <button onClick={() => addEvent()}>Add event</button>
+
 
   return (
     <AppBar position="static">
