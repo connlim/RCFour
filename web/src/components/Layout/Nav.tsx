@@ -16,6 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 import { signIn, mySignOut } from "../../firebase/auth";
 import { addEvent } from "../../firebase/functions/events/FirebaseEventService";
+import { mockCreationData, mockEventData } from "../../services/EventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
 
@@ -61,7 +62,7 @@ function Nav() {
   const title = "RC4Friends";
   // Logged In
   const tabs = LoggedIn ? ["Add Event"] : [];
-  const tabsClick = LoggedIn ? [addEvent] : [];
+  const tabsClick = LoggedIn ? [() => addEvent(mockCreationData)] : [];
   const settings = LoggedIn ? ["Sign Out"] : ["Sign In"];
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
