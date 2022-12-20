@@ -1,4 +1,4 @@
-import { ViewList } from '@mui/icons-material';
+import { Add, ViewList } from '@mui/icons-material';
 import {
 	Button,
 	Card,
@@ -9,8 +9,11 @@ import {
 	Fab,
 	List,
 	ListItemButton,
+	Tooltip,
 } from '@mui/material';
+import { Stack } from '@mui/system';
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../features/app/hooks';
 import { MapLocation } from '../../features/events/eventsSlice';
 import { EventData } from '../../services/EventService';
@@ -21,6 +24,7 @@ import EventMarker from './EventMarker';
 import { GeoMap } from './Map';
 
 export default function MainMap() {
+	const navigate = useNavigate();
 	const { events, currLocation } = useAppSelector((state) => state.events);
 	const [initFly, setInitFly] = useState<MapLocation>();
 	const [chooserOpen, setChooserOpen] = useState(false);
@@ -80,15 +84,26 @@ export default function MainMap() {
 				width: '100%',
 			}}>
 			<GeoMap flyTo={initFly} markers={markers}>
-				<Fab
-					onClick={toggleChooserOpen(true)}
-					sx={{
-						position: 'absolute',
-						left: (theme) => theme.spacing(2),
-						bottom: (theme) => theme.spacing(2),
-					}}>
-					<ViewList />
-				</Fab>
+				<Stack
+					direction="column"
+					spacing={2}
+					position="absolute"
+					left={(theme) => theme.spacing(2)}
+					bottom={(theme) => theme.spacing(2)}>
+					<Tooltip title="Create event">
+						<Fab
+							onClick={() => {
+								navigate('/create');
+							}}>
+							<Add />
+						</Fab>
+					</Tooltip>
+					<Tooltip title="All events">
+						<Fab onClick={toggleChooserOpen(true)}>
+							<ViewList />
+						</Fab>
+					</Tooltip>
+				</Stack>
 			</GeoMap>
 			{eventChooser}
 		</Card>
