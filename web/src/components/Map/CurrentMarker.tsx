@@ -1,5 +1,4 @@
-import { Person, PersonPin } from '@mui/icons-material';
-import { Avatar, Badge, Fab, IconButton, styled, Tooltip } from '@mui/material';
+import { Avatar, Badge, Tooltip } from '@mui/material';
 import { Marker } from 'react-map-gl';
 import { useAppSelector } from '../../features/app/hooks';
 import { auth } from '../../firebase/init';
