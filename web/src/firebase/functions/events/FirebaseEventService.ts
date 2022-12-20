@@ -30,12 +30,15 @@ export async function getAllEvents() {
       lng: data.location.longitude, // Can be undefined
     };
 
-    const username = (await getUserById(data.organiser))?.name || "Unknown";
+    const user = await getUserById(data.organiser);
+    const username = user?.name || "Unknown";
+    const profile_url = user?.profile || "";
 
     const event: EventData = {
       event_id: id,
       user_id: data.organiser,
       username,
+      profile_url,
       title: data.title,
       description: data.description,
       timestamp: data.timestamp,
@@ -65,12 +68,15 @@ export async function getEventById(id: string) {
       lng: data.location.longitude, // Can be undefined
     };
 
-    const username = (await getUserById(data.organiser))?.name || "Unknown";
+    const user = await getUserById(data.organiser);
+    const username = user?.name || "Unknown";
+    const profile_url = user?.profile || "";
 
     const result: EventData = {
       event_id: id,
       user_id: data.organiser,
       username,
+      profile_url,
       title: data.title,
       description: data.description,
       timestamp: data.timestamp,

@@ -21,6 +21,7 @@ export interface EventData {
   event_id: string;
   user_id: string;
   username: string;
+  profile_url: string;
   title: string;
   description: string;
   timestamp: string;
@@ -51,6 +52,7 @@ export const mockEventData: EventData = {
   event_id: "test_id",
   user_id: "testUserID",
   username: "testusername",
+  profile_url: "",
   title: "BBQ @ SUTD",
   description: "Come join us for a BBQ at SUTD",
   timestamp: "timestamp",
