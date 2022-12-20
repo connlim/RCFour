@@ -116,7 +116,7 @@ const EventCreation = () => {
       </Box>
 
       <Box>
-        <Typography
+        {/* <Typography
           sx={{
             alignSelf: "flex-start",
             fontFamily: "Roboto",
@@ -124,7 +124,7 @@ const EventCreation = () => {
           }}
         >
           Location
-        </Typography>
+        </Typography> */}
         <FormMap />
       </Box>
 
