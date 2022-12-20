@@ -19,7 +19,6 @@ export async function getUserById(uid: string): Promise<AppUser | null> {
   const docSnap = await getDoc(doc(db, "users", uid));
   if (docSnap.exists()) {
     const data = docSnap.data();
-    console.log(data);
     return new AppUser(data.uid, data.name, data.email);
   } else {
     return null;

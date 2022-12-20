@@ -15,7 +15,11 @@ import AdbIcon from "@mui/icons-material/Adb";
 
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, mySignOut } from "../../firebase/auth";
-import { addEvent, getAllEvents, getEventById } from "../../firebase/functions/events/FirebaseEventService";
+import {
+  addEvent,
+  getAllEvents,
+  getEventById,
+} from "../../firebase/functions/events/FirebaseEventService";
 import { mockCreationData, mockEventData } from "../../services/EventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
@@ -31,9 +35,7 @@ function Nav() {
   React.useEffect(() => {
     onIdTokenChanged(auth, (user) => {
       if (user != null) {
-        console.log("Setting uid");
         setUid(user.uid);
-        console.log(uid);
       } else {
         setUid("");
       }
@@ -69,7 +71,7 @@ function Nav() {
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
   return (
-    <AppBar position="static" >
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -90,7 +92,6 @@ function Nav() {
           >
             {title}
           </Typography>
-
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -153,7 +154,7 @@ function Nav() {
           >
             {title}
           </Typography>
-              
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {tabs.map((tab, i) => (
               <Button
@@ -207,9 +208,7 @@ function Nav() {
               ))}
             </Menu>
           </Box>
-            {!LoggedIn && 
-            <SignInButton />
-        }
+          {!LoggedIn && <SignInButton />}
           <EventCreationButton />
         </Toolbar>
       </Container>

@@ -38,7 +38,7 @@ export default function EventDetails(): JSX.Element {
                 Date: {new Date(parseInt(event.timestamp)).toDateString()}
               </Typography>
               <Typography sx={{ mb: 2 }} color="text.secondary">
-                By: {event.user_id}
+                By: {event.username}
               </Typography>
               <br></br>
               <Typography>{event.description}</Typography>
