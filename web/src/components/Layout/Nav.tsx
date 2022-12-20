@@ -25,6 +25,11 @@ import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
 import EventCreationButton from "../Creation/EventCreationButton";
 import SignInButton from "../Shared/SignInButton";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+const storage = getStorage();
+const storageRef = ref(storage, 'some-child');
+
 
 function Nav() {
   const navigate = useNavigate();
@@ -34,12 +39,11 @@ function Nav() {
 
   React.useEffect(() => {
     onIdTokenChanged(auth, (user) => {
-      if (user != null) {
-        setUid(user.uid);
-      } else {
+      if (user == null) {
         setUid("");
+      } else {
+        setUid(user.uid);
       }
-      // https://firebase.google.com/docs/reference/js/firebase.User
     });
   });
 
@@ -173,7 +177,9 @@ function Nav() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/avatar.jpg" />
+                <Avatar alt={"user"}
+                  src={auth.currentUser?.photoURL ?? undefined} 
+                  />
               </IconButton>
             </Tooltip>
             <Menu
