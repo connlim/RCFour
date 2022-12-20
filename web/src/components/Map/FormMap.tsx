@@ -1,40 +1,37 @@
-import { ViewList } from '@mui/icons-material';
-import { Box, Button, Grid, TextField } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import { useAppSelector } from '../../features/app/hooks';
-import { MapLocation } from '../../features/events/eventsSlice';
-import ClickMarker from './ClickMarker';
-import CurrentMarker from './CurrentMarker';
-import { GeoMap } from './Map';
+import { ViewList } from "@mui/icons-material";
+import { Box, Button, Grid, TextField } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { useAppSelector } from "../../features/app/hooks";
+import { MapLocation } from "../../features/events/eventsSlice";
+import ClickMarker from "./ClickMarker";
+import CurrentMarker from "./CurrentMarker";
+import { GeoMap } from "./Map";
 
 export default function FormMap() {
-	const { currLocation } = useAppSelector((state) => state.events);
-	const [initFly, setInitFly] = useState<MapLocation>();
+  const { currLocation } = useAppSelector((state) => state.events);
+  const [initFly, setInitFly] = useState<MapLocation>();
 
-	useEffect(() => {
-		if (!initFly && currLocation) {
-			setInitFly({
-				latitude: currLocation.latitude,
-				longitude: currLocation.longitude,
-			});
-		}
-	}, [initFly, currLocation]);
+  useEffect(() => {
+    if (!initFly && currLocation) {
+      setInitFly({
+        latitude: currLocation.latitude,
+        longitude: currLocation.longitude,
+      });
+    }
+  }, [initFly, currLocation]);
 
-	const markers = [
-    <ClickMarker key="clickclickclick" />,
-		<CurrentMarker key="im_here" />
-  ];
+  const markers = [<ClickMarker key="clickclickclick" />, <CurrentMarker key="im_here" />];
 
-	const handleLocationSearch = (e: any) => {
-		console.log(e);
-	}
+  const handleLocationSearch = (e: any) => {
+    console.log(e);
+  };
 
-	return (
-		<>
-			<Grid container spacing={0}>
+  return (
+    <>
+      {/* <Grid container spacing={0}>
 				<Grid item xs={11}>
-					<TextField 
-						sx={{ 
+					<TextField
+						sx={{
 							justifySelf: "start",
 							width: "100%"
 						}}
@@ -61,10 +58,10 @@ export default function FormMap() {
 					Search
 				</Button>
 				</Grid>
-			</Grid>
-			<Box height="400px" alignItems="center">
-				<GeoMap flyTo={initFly} markers={markers} />
-			</Box>
-		</>
-	);
+			</Grid> */}
+      <Box height="400px" alignItems="center">
+        <GeoMap flyTo={initFly} markers={markers} />
+      </Box>
+    </>
+  );
 }
