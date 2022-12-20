@@ -1,4 +1,14 @@
-import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import {
+	Avatar,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	IconButton,
+	Tooltip,
+} from '@mui/material';
+import { orange } from '@mui/material/colors';
+import { bgcolor } from '@mui/system';
 import { useMemo, useState } from 'react';
 import { MapboxEvent, Marker } from 'react-map-gl';
 import { EventData } from '../../services/EventService';
@@ -28,8 +38,16 @@ export default function EventMarker({ event }: EventMarkerProps) {
 
 	return coord ? (
 		<>
-			<Marker anchor="bottom" color="orange" onClick={handleOpen} {...coord} />
-			<Dialog open={menuOpen} onClose={handleClose}>
+			<Marker anchor="bottom" onClick={handleOpen} {...coord}>
+				<Tooltip title={event.title}>
+					<IconButton>
+						<Avatar sx={{ boxShadow: 10, bgcolor: orange[800] }}>
+							{event.username.length ? event.username[0] : undefined}
+						</Avatar>
+					</IconButton>
+				</Tooltip>
+			</Marker>
+			<Dialog open={menuOpen} onClose={handleClose} fullWidth>
 				<DialogContent>
 					<EventStrip event={event} />
 				</DialogContent>
