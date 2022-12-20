@@ -52,7 +52,7 @@ export function GeoMap({ markers, flyTo, children }: Props) {
 				duration: FLY_DURATION,
 				zoom: DEFAULT_ZOOM,
 			});
-		} else {
+		} else if (flyTo) {
 			dispatch(
 				pushSnack({
 					severity: 'error',
