@@ -1,25 +1,22 @@
-import { Box } from "@mui/system";
-import React from "react";
-import EventList from "../components/Event/EventList";
-import { GeoMap } from "../components/Map/Map";
+import MainMap from "../components/Map/MainMap";
 
 const HomePage = () => {
   return (
-    <div>
-      <Box
-        sx={{
-          height: "80vh",
-        }}
-      >
-        <GeoMap
-          coords={[]}
-          pinCoord={null}
-          updatePin={(lat, long) => {
-            console.log(lat, long);
-          }}
-        />
-      </Box>
-      <EventList></EventList>
+    <div
+      style={{
+        padding: "0px",
+        margin: "0px",
+        marginTop: "68px",
+        height: "calc(100vh - 68px)",
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        zIndex: -99,
+      }}
+    >
+      <MainMap />
     </div>
   );
 };

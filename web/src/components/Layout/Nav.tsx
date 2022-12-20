@@ -15,12 +15,21 @@ import AdbIcon from "@mui/icons-material/Adb";
 
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, mySignOut } from "../../firebase/auth";
-import { addEvent, getAllEvents, getEventById } from "../../firebase/functions/events/FirebaseEventService";
+import {
+  addEvent,
+  getAllEvents,
+  getEventById,
+} from "../../firebase/functions/events/FirebaseEventService";
 import { mockCreationData, mockEventData } from "../../services/EventService";
 import { auth } from "../../firebase/init";
 import { onAuthStateChanged, onIdTokenChanged } from "@firebase/auth";
 import EventCreationButton from "../Creation/EventCreationButton";
 import SignInButton from "../Shared/SignInButton";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+const storage = getStorage();
+const storageRef = ref(storage, 'some-child');
+
 
 function Nav() {
   const navigate = useNavigate();
@@ -30,14 +39,11 @@ function Nav() {
 
   React.useEffect(() => {
     onIdTokenChanged(auth, (user) => {
-      if (user != null) {
-        console.log("Setting uid");
-        setUid(user.uid);
-        console.log(uid);
-      } else {
+      if (user == null) {
         setUid("");
+      } else {
+        setUid(user.uid);
       }
-      // https://firebase.google.com/docs/reference/js/firebase.User
     });
   });
 
@@ -69,7 +75,7 @@ function Nav() {
   const settingsClick = LoggedIn ? [mySignOut] : [signIn];
 
   return (
-    <AppBar position="static" >
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -90,7 +96,6 @@ function Nav() {
           >
             {title}
           </Typography>
-
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -153,7 +158,7 @@ function Nav() {
           >
             {title}
           </Typography>
-              
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {tabs.map((tab, i) => (
               <Button
@@ -172,7 +177,9 @@ function Nav() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/avatar.jpg" />
+                <Avatar alt={"user"}
+                  src={auth.currentUser?.photoURL ?? undefined} 
+                  />
               </IconButton>
             </Tooltip>
             <Menu
@@ -207,9 +214,7 @@ function Nav() {
               ))}
             </Menu>
           </Box>
-            {!LoggedIn && 
-            <SignInButton />
-        }
+          {!LoggedIn && <SignInButton />}
           <EventCreationButton />
         </Toolbar>
       </Container>

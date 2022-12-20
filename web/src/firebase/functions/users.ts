@@ -10,6 +10,7 @@ export async function addUserIfNotExist(user: User): Promise<void> {
       uid: user.uid,
       name: user.displayName,
       email: user.email,
+      profile: user.photoURL,
     },
     { merge: true }
   );
@@ -19,8 +20,7 @@ export async function getUserById(uid: string): Promise<AppUser | null> {
   const docSnap = await getDoc(doc(db, "users", uid));
   if (docSnap.exists()) {
     const data = docSnap.data();
-    console.log(data);
-    return new AppUser(data.uid, data.name, data.email);
+    return new AppUser(data.uid, data.name, data.email, data.profile);
   } else {
     return null;
   }

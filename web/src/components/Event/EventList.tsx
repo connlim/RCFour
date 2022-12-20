@@ -6,13 +6,7 @@ import EventStrip from './EventStrip';
 
 const EventList = () => {
 	const dispatch = useAppDispatch();
-	const { lifecycleStatus, events } = useAppSelector((state) => state.events);
-
-	useEffect(() => {
-		if (lifecycleStatus === 'initial') {
-			dispatch(getEvents());
-		}
-	});
+	const { events } = useAppSelector((state) => state.events);
 
 	return (
 		<Stack direction="column" spacing={1}>

@@ -1,27 +1,41 @@
-import { doc, collection, addDoc, setDoc, getDoc, getDocs, deleteDoc, GeoPoint } from "@firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  setDoc,
+  getDoc,
+  getDocs,
+  deleteDoc,
+  GeoPoint,
+} from "@firebase/firestore";
 
 import { db } from "../../init";
 import { EventCreationData, EventData, Geopoint } from "../../../services/EventService";
+import { getUserById } from "../users";
 
 const eventsCollection: string = "events";
 
 export async function getAllEvents() {
   const querySnapshot = await getDocs(collection(db, eventsCollection));
 
-  const result : EventData[] = [];
-  querySnapshot.forEach((doc) => {
+  const result: EventData[] = [];
+
+  for (const doc of querySnapshot.docs) {
     const id: string = doc.id;
     const data = doc.data();
     console.log(`${doc.id} => ${doc.data().location.latitude}`);
 
     const loc: Geopoint = {
       lat: data.location.latitude, 
-      lng: data.location.longitude 
-    }
-    
+      lng: data.location.longitude, 
+    };
+
+    const username = (await getUserById(data.organiser))?.name || "Unknown";
+
     const event: EventData = {
       event_id: id,
       user_id: data.organiser,
+      username,
       title: data.title,
       description: data.description,
       timestamp: data.timestamp,
@@ -29,15 +43,17 @@ export async function getAllEvents() {
       attendees_ids: data.attendees,
       attendees_names: data.attendees_names,
     };
+
     result.push(event);
-  });
+  }
+
   return result;
 }
 
 export async function getEventById(id: string) {
   const eventRef = doc(db, eventsCollection, id);
   const eventSnap = await getDoc(eventRef);
-  
+
   if (!eventSnap.exists()) {
     console.log("No such document!", id);
   } else {
@@ -46,12 +62,15 @@ export async function getEventById(id: string) {
 
     const loc: Geopoint = {
       lat: data.location.latitude, 
-      lng: data.location.longitude 
-    }
+      lng: data.location.longitude, 
+    };
+
+    const username = (await getUserById(data.organiser))?.name || "Unknown";
 
     const result: EventData = {
       event_id: id,
       user_id: data.organiser,
+      username,
       title: data.title,
       description: data.description,
       timestamp: data.timestamp,
@@ -76,7 +95,6 @@ export async function addEvent(data: EventCreationData) {
       attendees_names: [],
     });
     console.log("Add new event with ID: ", newEvent.id);
-
   } catch (e) {
     console.error("Error adding event: ", e);
   }
@@ -94,9 +112,8 @@ export async function updateEvent(data: EventData) {
       attendees_names: data.attendees_names,
     });
     console.log("Updated event with ID: ", data.event_id);
-
   } catch (e) {
-    console.log("Error updating event: ", data.event_id)
+    console.log("Error updating event: ", data.event_id);
   }
 }
 
@@ -104,7 +121,6 @@ export async function deleteEvent(id: string) {
   try {
     await deleteDoc(doc(db, eventsCollection, id));
     console.log("Successfully deleted event: ", id);
-
   } catch (e) {
     console.log("Error deleting event: ", id);
   }

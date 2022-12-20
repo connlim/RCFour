@@ -5,7 +5,7 @@ import {
 
 const QuestCreation = () => {
   return (
-  <Box>
+    <Box>
       Quest Creation
     </Box>
   )

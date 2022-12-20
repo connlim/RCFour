@@ -7,11 +7,10 @@ const Creation = () => {
   return (
     <Box
       sx={{
-        marginBottom: "2rem"
+        marginTop: "0rem"
       }}
     >
       <EventCreation />
-      <QuestCreation />
     </Box>
   )
 }

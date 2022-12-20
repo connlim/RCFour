@@ -1,4 +1,4 @@
-import { Alert, Snackbar } from '@mui/material';
+import { Alert, Slide, SlideProps, Snackbar } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../features/app/hooks';
 import {
@@ -20,7 +20,7 @@ const MainSnackbar = () => {
 		} else if (snacks.length && snackInFocus && open) {
 			setOpen(false);
 		}
-	}, [snacks, snackInFocus, open]);
+	}, [dispatch, snacks, snackInFocus, open]);
 
 	const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') return;
@@ -36,6 +36,8 @@ const MainSnackbar = () => {
 			open={open}
 			autoHideDuration={6000}
 			onClose={handleClose}
+			anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+			TransitionComponent={SlideTransition}
 			TransitionProps={{ onExited: handleExited }}>
 			<Alert severity={snackInFocus?.severity} onClose={handleClose}>
 				{snackInFocus?.message}
@@ -45,3 +47,7 @@ const MainSnackbar = () => {
 };
 
 export default MainSnackbar;
+
+function SlideTransition(props: SlideProps) {
+	return <Slide {...props} direction="down" />;
+}

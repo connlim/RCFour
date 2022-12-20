@@ -1,91 +1,107 @@
 import * as React from 'react';
-import Map, { Marker } from 'react-map-gl';
+import Map, {
+	MapLayerMouseEvent,
+	MapProps,
+	MapRef,
+	Marker,
+	ViewStateChangeEvent,
+} from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useAppDispatch, useAppSelector } from '../../features/app/hooks';
+import {
+	setDragLocation,
+	setMarkLocation,
+} from '../../features/events/eventsSlice';
+import { Fab } from '@mui/material';
+import { NearMe } from '@mui/icons-material';
+import { pushSnack } from '../../features/snacks/snacksSlice';
 
-const token = 'pk.eyJ1IjoiYnJvc2VwaDAiLCJhIjoiY2twbDFiYWptMWdocDJucDliNHJsNThobiJ9.3w6p_pdYAMBaKnFMhb1SSQ';
+const token =
+	'pk.eyJ1IjoiYnJvc2VwaDAiLCJhIjoiY2twbDFiYWptMWdocDJucDliNHJsNThobiJ9.3w6p_pdYAMBaKnFMhb1SSQ';
 
 const defaultCoor: Coor = {
-  longitude: -122.4,
-  latitude: 37.8
-}
+	longitude: -122.4,
+	latitude: 37.8,
+};
+
+const FLY_DURATION = 1000;
+const DEFAULT_ZOOM = 15;
 
 type Coor = {
-  latitude: number,
-  longitude: number
+	latitude: number;
+	longitude: number;
+};
+
+interface Props extends React.PropsWithChildren {
+	markers?: (JSX.Element | Element | null)[];
+	flyTo?: Coor;
 }
 
-type Props = {
-  coords?: Coor[];
-  pinCoord: Coor|null;
-  updatePin?: (lat: number, long: number) => void;
-}
+export function GeoMap({ markers, flyTo, children }: Props) {
+	const dispatch = useAppDispatch();
+	const { dragLocation, currLocation } = useAppSelector(
+		(state) => state.events,
+	);
+	const ref = React.useRef<MapRef | null>(null);
 
-export function GeoMap(props: Props) {
-  const { coords, pinCoord, updatePin } = props;
-  const [currCoor, setCurrCoor] = React.useState<Coor|null>(null)
-  const [centerCoor, setCenterCoor] = React.useState<Coor>(defaultCoor);
+	React.useEffect(() => {
+		if (flyTo?.latitude != null && flyTo?.longitude != null) {
+			ref.current?.flyTo({
+				center: [flyTo.longitude, flyTo.latitude],
+				duration: FLY_DURATION,
+				zoom: DEFAULT_ZOOM,
+			});
+		} else if (flyTo) {
+			dispatch(
+				pushSnack({
+					severity: 'error',
+					message: 'Invalid coordinates!',
+				}),
+			);
+		}
+	}, [dispatch, flyTo]);
 
-  React.useEffect(() => {
-    const id = navigator.geolocation.watchPosition(
-      (pos) => {
-        const {latitude, longitude} = pos.coords;
-        if (currCoor == null) setCenterCoor({latitude, longitude}); 
-        setCurrCoor({latitude, longitude});
-      },
-      (err) => console.log(err),
-      {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-      }
-    )
-    return () => navigator.geolocation.clearWatch(id);
-  }, [])
+	const handleMove = (e: ViewStateChangeEvent) => {
+		const { latitude, longitude, zoom } = e.viewState;
+		dispatch(setDragLocation({ latitude, longitude, zoom }));
+	};
 
-  const handleMove = (e: any) => {
-    const {longitude, latitude} = e.viewState;
-    setCenterCoor({latitude, longitude});
-  }
+	const handleClick = (e: MapLayerMouseEvent) => {
+		const { lng, lat } = e.lngLat;
+		dispatch(setMarkLocation({ latitude: lat, longitude: lng }));
+	};
 
-  const handleClick = (e: any) => {
-    const {lng, lat} = e.lngLat;
-    if (updatePin) updatePin(lat, lng);
-  }
+	const handleFlyToCurrent = () => {
+		if (currLocation) {
+			ref.current?.flyTo({
+				center: [currLocation.longitude, currLocation.latitude],
+				duration: FLY_DURATION,
+				zoom: DEFAULT_ZOOM,
+			});
+		}
+	};
 
-  return (
-    <Map
-      onMove={handleMove}
-      onClick={handleClick}
-      initialViewState={{ zoom: 14 }}
-      {...centerCoor}
-      style={{ width: '100%', height: '100%' }}
-      mapStyle="mapbox://styles/mapbox/streets-v9"
-      mapboxAccessToken={token}
-    >
-      {
-        coords !== undefined && 
-        coords.map(coor => {
-          return (
-            <Marker
-              color='red'
-              {...coor}
-            />
-          )
-        })
-      }
-      <Marker
-        color='gold'
-        {...currCoor}
-      />
-      {
-        pinCoord &&
-        <Marker
-          color='green'
-          {...pinCoord}
-        />
-      }
-      
-    </Map>
-  );
+	return (
+		<Map
+			ref={ref}
+			onMove={handleMove}
+			onClick={handleClick}
+			{...(dragLocation ?? defaultCoor)}
+			mapStyle="mapbox://styles/mapbox/streets-v9"
+			mapboxAccessToken={token}>
+			{markers}
+			{children}
+			<Fab
+				disabled={!currLocation}
+				onClick={handleFlyToCurrent}
+				sx={{
+					position: 'absolute',
+					right: (theme) => theme.spacing(2),
+					bottom: (theme) => theme.spacing(2),
+				}}>
+				<NearMe />
+			</Fab>
+		</Map>
+	);
 }

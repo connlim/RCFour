@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 import Nav from "./Nav";
 import Footer from "./Footer";
-import { Box } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 
 type LayoutProps = {
-	children: React.ReactNode;
+  children: React.ReactNode;
 };
 
 const Layout = (props: LayoutProps) => {
@@ -21,7 +21,7 @@ const Layout = (props: LayoutProps) => {
       <main>{props.children}</main>
       <Footer />
     </Box>
-  )
-}
+  );
+};
 
 export default Layout;
