@@ -7,12 +7,14 @@ import FormMap from "../Map/FormMap";
 import { useAppDispatch, useAppSelector } from "../../features/app/hooks";
 import { pushSnack } from "../../features/snacks/snacksSlice";
 import { createEvent } from "../../features/events/eventsSlice";
+import { useNavigate } from "react-router-dom";
 
 const EventCreation = () => {
   const dispatch = useAppDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { markLocation } = useAppSelector((state) => state.events);
+  const navigate = useNavigate()
 
   const handleTitleChange = (event: any) => {
     const target = event.target;
@@ -47,11 +49,13 @@ const EventCreation = () => {
       },
     };
 
+
     dispatch(createEvent(data))
       .then((_) => {
         dispatch(pushSnack({ severity: "success", message: "Event created!" }));
         setTitle("");
         setDescription("");
+        navigate("/")
       })
       .catch((err) => {
         console.error(err);
@@ -91,7 +95,7 @@ const EventCreation = () => {
           sx={{
             width: "100%",
           }}
-        />
+          />
       </Box>
 
       <Box>
@@ -112,7 +116,7 @@ const EventCreation = () => {
           sx={{
             width: "100%",
           }}
-        />
+          />
       </Box>
 
       <Box>
