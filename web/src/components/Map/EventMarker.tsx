@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { Marker } from 'react-map-gl';
+import { MapboxEvent, Marker } from 'react-map-gl';
 import { EventData } from '../../services/EventService';
 import EventStrip from '../Event/EventStrip';
 
@@ -17,24 +17,24 @@ export default function EventMarker({ event }: EventMarkerProps) {
 			: null;
 	}, [event]);
 
-	const toggleOpen = (open: boolean) => () => {
-		setMenuOpen(open);
+	const handleOpen = (e: MapboxEvent<MouseEvent>) => {
+		e.originalEvent.stopPropagation();
+		setMenuOpen(true);
+	};
+
+	const handleClose = () => {
+		setMenuOpen(false);
 	};
 
 	return coord ? (
 		<>
-			<Marker
-				anchor="bottom"
-				color="orange"
-				onClick={toggleOpen(true)}
-				{...coord}
-			/>
-			<Dialog open={menuOpen} onClose={toggleOpen(false)}>
+			<Marker anchor="bottom" color="orange" onClick={handleOpen} {...coord} />
+			<Dialog open={menuOpen} onClose={handleClose}>
 				<DialogContent>
 					<EventStrip event={event} />
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={toggleOpen(false)}>Close</Button>
+					<Button onClick={handleClose}>Close</Button>
 				</DialogActions>
 			</Dialog>
 		</>
