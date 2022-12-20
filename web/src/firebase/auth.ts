@@ -1,8 +1,4 @@
-import {
-  signInWithPopup,
-  signOut,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { signInWithPopup, signOut, GoogleAuthProvider } from "firebase/auth";
 import { addUserIfNotExist } from "./functions/users";
 
 import { auth } from "./init";
@@ -14,14 +10,14 @@ export async function signIn() {
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
       // The signed-in user info.
       const user = result.user;
 
       console.log(user);
 
       addUserIfNotExist(user);
-    }).catch((error) => {
+    })
+    .catch((error) => {
       // Handle Errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -34,9 +30,11 @@ export async function signIn() {
 }
 
 export async function mySignOut() {
-  signOut(auth).then(() => {
-    console.log("Sign out successful");
-  }).catch((error) => {
-    console.log("Sign out failed");
-  });
+  signOut(auth)
+    .then(() => {
+      console.log("Sign out successful");
+    })
+    .catch((error) => {
+      console.log("Sign out failed");
+    });
 }
