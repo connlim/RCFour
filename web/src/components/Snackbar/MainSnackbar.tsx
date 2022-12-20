@@ -20,7 +20,7 @@ const MainSnackbar = () => {
 		} else if (snacks.length && snackInFocus && open) {
 			setOpen(false);
 		}
-	}, [snacks, snackInFocus, open]);
+	}, [dispatch, snacks, snackInFocus, open]);
 
 	const handleClose = (event: SyntheticEvent | Event, reason?: string) => {
 		if (reason === 'clickaway') return;

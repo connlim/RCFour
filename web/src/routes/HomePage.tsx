@@ -1,17 +1,24 @@
-import { Box } from '@mui/system';
-import React from 'react';
-import EventList from '../components/Event/EventList';
-import MainMap from '../components/Map/MainMap';
+import MainMap from "../components/Map/MainMap";
 
 const HomePage = () => {
-	return (
-		<Box
-			sx={{
-				height: '80vh',
-			}}>
-			<MainMap />
-		</Box>
-	);
+  return (
+    <div
+      style={{
+        padding: "0px",
+        margin: "0px",
+        marginTop: "68px",
+        height: "calc(100vh - 68px)",
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        zIndex: -99,
+      }}
+    >
+      <MainMap />
+    </div>
+  );
 };
 
 export default HomePage;

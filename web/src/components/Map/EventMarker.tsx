@@ -1,6 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import {
+	Avatar,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	IconButton,
+	Tooltip,
+} from '@mui/material';
+import { orange } from '@mui/material/colors';
+import { bgcolor } from '@mui/system';
 import { useMemo, useState } from 'react';
-import { Marker } from 'react-map-gl';
+import { MapboxEvent, Marker } from 'react-map-gl';
 import { EventData } from '../../services/EventService';
 import EventStrip from '../Event/EventStrip';
 
@@ -17,24 +27,32 @@ export default function EventMarker({ event }: EventMarkerProps) {
 			: null;
 	}, [event]);
 
-	const toggleOpen = (open: boolean) => () => {
-		setMenuOpen(open);
+	const handleOpen = (e: MapboxEvent<MouseEvent>) => {
+		e.originalEvent.stopPropagation();
+		setMenuOpen(true);
+	};
+
+	const handleClose = () => {
+		setMenuOpen(false);
 	};
 
 	return coord ? (
 		<>
-			<Marker
-				anchor="bottom"
-				color="orange"
-				onClick={toggleOpen(true)}
-				{...coord}
-			/>
-			<Dialog open={menuOpen} onClose={toggleOpen(false)}>
+			<Marker anchor="bottom" onClick={handleOpen} {...coord}>
+				<Tooltip title={event.title}>
+					<IconButton>
+						<Avatar sx={{ boxShadow: 10, bgcolor: orange[800] }}>
+							{event.username.length ? event.username[0] : undefined}
+						</Avatar>
+					</IconButton>
+				</Tooltip>
+			</Marker>
+			<Dialog open={menuOpen} onClose={handleClose} fullWidth>
 				<DialogContent>
 					<EventStrip event={event} />
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={toggleOpen(false)}>Close</Button>
+					<Button onClick={handleClose}>Close</Button>
 				</DialogActions>
 			</Dialog>
 		</>

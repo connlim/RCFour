@@ -6,15 +6,11 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	Divider,
 	Fab,
 	List,
-	ListItem,
 	ListItemButton,
-	Stack,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import { Marker } from 'react-map-gl';
 import { useAppSelector } from '../../features/app/hooks';
 import { MapLocation } from '../../features/events/eventsSlice';
 import { EventData } from '../../services/EventService';
@@ -78,25 +74,23 @@ export default function MainMap() {
 	);
 
 	return (
-		<Stack direction="column" height="100%" alignItems="center">
-			<Card
-				sx={{
-					height: '80%',
-					width: '80%',
-				}}>
-				<GeoMap flyTo={initFly} markers={markers}>
-					<Fab
-						onClick={toggleChooserOpen(true)}
-						sx={{
-							position: 'absolute',
-							left: (theme) => theme.spacing(2),
-							bottom: (theme) => theme.spacing(2),
-						}}>
-						<ViewList />
-					</Fab>
-				</GeoMap>
-				{eventChooser}
-			</Card>
-		</Stack>
+		<Card
+			sx={{
+				height: '100%',
+				width: '100%',
+			}}>
+			<GeoMap flyTo={initFly} markers={markers}>
+				<Fab
+					onClick={toggleChooserOpen(true)}
+					sx={{
+						position: 'absolute',
+						left: (theme) => theme.spacing(2),
+						bottom: (theme) => theme.spacing(2),
+					}}>
+					<ViewList />
+				</Fab>
+			</GeoMap>
+			{eventChooser}
+		</Card>
 	);
 }
