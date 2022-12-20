@@ -26,8 +26,8 @@ export async function getAllEvents() {
     console.log(`${doc.id} => ${doc.data().location.latitude}`);
 
     const loc: Geopoint = {
-      lat: data.location.latitude, // Can be undefined
-      lng: data.location.longitude, // Can be undefined
+      lat: data.location.latitude, 
+      lng: data.location.longitude, 
     };
 
     const user = await getUserById(data.organiser);
@@ -64,8 +64,8 @@ export async function getEventById(id: string) {
     console.log("Document data:", data);
 
     const loc: Geopoint = {
-      lat: data.location.latitude, // Can be undefined
-      lng: data.location.longitude, // Can be undefined
+      lat: data.location.latitude, 
+      lng: data.location.longitude, 
     };
 
     const user = await getUserById(data.organiser);
@@ -108,7 +108,7 @@ export async function addEvent(data: EventCreationData) {
 
 export async function updateEvent(data: EventData) {
   try {
-    const newEvent = await setDoc(doc(db, eventsCollection, data.event_id), {
+    await setDoc(doc(db, eventsCollection, data.event_id), {
       title: data.title,
       description: data.description,
       organiser: data.user_id,
